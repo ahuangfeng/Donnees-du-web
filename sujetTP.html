@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>TP 3IF XPath, XSLT, XQuery, DOM, Ajax</title>
+  <meta name="author" content="Elöd EGYED-ZSIGMOND">
+
+  
+  
+  <style type="text/css">
+<!--
+#main {
+  position: relative;
+  z-index: 0;
+  width: 90%;
+  left: 5%;
+  top: 10px;
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+#body {
+  margin: 0em 0% 0em 1%;
+  font-family: Arial,Helvetica,sans-serif;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  font-size: 90%;
+  line-height: normal;
+  font-size-adjust: none;
+  font-stretch: normal;
+}
+ 
+ #main p.xml {
+  border: 1px solid navy;
+  font-family: "Courier New",Courier,monospace;
+  background-color: #f0ffff;
+  color: black;
+  text-indent: 0em;
+}
+
+#main span.explication {
+  border: 1px solid navy;
+  background-color: #ccccff;
+  color: black;
+  }
+
+#main .instruction {
+	font-style: italic;
+	color: #006600;
+}
+.Style1 {color: #000000}
+
+-->
+  </style>
+  
+<link rel="stylesheet" href="highlight/styles/default.css">
+<script src="highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/javascript">
+//fonctions javascript
+// <![CDATA[      
+  
+		  function recupererPremierEnfantDeTypeNode(n) {
+			x = n.firstChild;
+			while ( x.nodeType != 1 ) { // Test if x is an element node (and not a text node or other)
+			  x = x.nextSibling;
+			}
+			return x;
+		  }
+		//change le contenu de l'élement avec l'id "nom" avec la chaine de caractéres en paramètre	  
+		  function setNom( nom ) {
+			var elementHtmlARemplir = window.document.getElementById("id_nom_a_remplacer");
+			elementHtmlARemplir.innerHTML = nom;
+		  }
+		
+		//charge le fichier XML se trouvant à l'URL relative donné dans le paramètreet le retourne
+        function chargerHttpXML(xmlDocumentUrl) { 
+          
+          var httpAjax;
+          
+          httpAjax = window.XMLHttpRequest ?
+            new XMLHttpRequest() :
+            new ActiveXObject('Microsoft.XMLHTTP');
+          
+          if (httpAjax.overrideMimeType) {
+            httpAjax.overrideMimeType('text/xml');
+          }
+          
+          //chargement du fichier XML à l'aide de XMLHttpRequest synchrone (le 3° paramètre est défini à false)
+          httpAjax.open('GET', xmlDocumentUrl, false);
+          httpAjax.send();
+          
+          return httpAjax.responseXML;
+        }
+  
+        // Charge le fichier JSON se trouvant à l'URL donnée en paramètre et le retourne
+        function chargerHttpJSON(jsonDocumentUrl) {
+
+            var httpAjax;
+
+            httpAjax = window.XMLHttpRequest ?
+                        new XMLHttpRequest() :
+                        new ActiveXObject('Microsoft.XMLHTTP');
+
+                if (httpAjax.overrideMimeType) {
+                    httpAjax.overrideMimeType('text/xml');
+                }
+
+                // chargement du fichier JSON à l'aide de XMLHttpRequest synchrone (le 3° paramètre est défini à false)
+                httpAjax.open('GET', jsonDocumentUrl, false);
+                httpAjax.send();
+
+                var responseData = eval("(" + httpAjax.responseText + ")");
+
+                return responseData;
+            } 
+ 
+
+  function Bouton2_ajaxBibliographie(xmlDocumentUrl, xslDocumentUrl, newElementName) {
+	  
+		  var xsltProcessor = new XSLTProcessor();
+
+		  // Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
+		  var xslDocument = chargerHttpXML(xslDocumentUrl); 
+
+		  // Importation du .xsl
+		  xsltProcessor.importStylesheet(xslDocument);
+
+		  // Chargement du fichier XML à l'aide de XMLHttpRequest synchrone 
+		  var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+
+		  // Création du document XML transformé par le XSL
+		  var newXmlDocument = xsltProcessor.transformToDocument(xmlDocument);
+
+		  // Recherche du parent (dont l'id est "here") de l'élément à remplacer dans le document HTML courant
+		  var elementHtmlParent = window.document.getElementById("id_element_a_remplacer");
+		  // Premier élément fils du parent
+		  var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
+		  // Premier élément "elementName" du nouveau document (par exemple, "ul", "table"...)
+		  var elementAInserer = newXmlDocument.getElementsByTagName(newElementName)[0];
+		  
+		  // Remplacement de l'élément
+		  elementHtmlParent.replaceChild(elementAInserer,elementHtmlARemplacer);
+
+    }
+
+	 /////////////////////////////////////////////////////////////////////////////////////
+  function Bouton3_ajaxEmployees(xmlDocumentUrl) {
+
+		  
+	  var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+	  
+	  //extraction des noms à partir du document XML (avec une feuille de style ou en javascript)
+	  var lesNoms = xmlDocument.getElementsByTagName("LastName");
+	  
+	  // Parcours de la liste des noms avec une boucle for et 
+	  // construction d'une chaine de charactères contenant les noms séparés par des espaces 
+	  // Pour avoir la longueur d'une liste : attribut 'length'
+	  // Accès au texte d'un noeud "LastName" : NOM_NOEUD.firstChild.nodeValue
+	  var chaineDesNoms = "";
+	  for (i=0;i<lesNoms.length;i++) {
+				if (i>0) { chaineDesNoms = chaineDesNoms +", "; }
+				chaineDesNoms=chaineDesNoms +lesNoms[i].firstChild.nodeValue + " ";
+	  }
+	  
+	  
+	  // Appel (ou recopie) de la fonction setNom(...) ou bien autre façon de modifier le texte de l'élément "span"
+	  setNom(chaineDesNoms);
+	  
+	  
+
+  }
+  
+  function Bouton4_ajaxEmployeesTableau(xmlDocumentUrl, xslDocumentUrl) {
+  //commenter la ligne suivante qui affiche la boîte de dialogue!
+	  alert("Fonction à compléter...");
+  }
+      // ]]>
+</script>
+
+<style type="text/css">
+<!--
+.Style2 {
+	color: #FF0000;
+	font-weight: bold;
+}
+-->
+</style>
+</head><body>
+<div id="main">
+<h1>TP 3IF XML, XSL, XQuery, Javascript, DOM 2016-2017</h1>
+<h2>Introduction</h2>
+<p>Lisez attentivement et suivez les consignes!</p>
+  <p>Le but de ce TP est de vous initier &agrave; la manipulation des
+    documents XML avec des outils d&eacute;di&eacute;s et dans le contexte d'un navigateur web. Vous allez pour cela &eacute;tudier, valider, modifier et
+    interroger un fichier XML. Pour la premi&egrave;re partie du TP, vous allez utilisez l'outil EditiX <span class="instruction">(<code></code>disponible dans l'archive Outils pour le TP sur Moodle2) et Firefox </span>, pour la deuxi&egrave;me partie l'outil BaseX, pour la troisi&egrave;me partie, le navigateur Firefox. </p>
+  <p class="instruction"> Un site tr&egrave;s utile pour le TP: <a href="http://www.w3schools.com/default.asp" onclick="window.open(this.href); return false;">W3Schools</a> (r&eacute;f&eacute;rence et tutoriels sur XML, DTD/Schema, XSL, XQuery...)</p>
+  <p>Vous allez cr&eacute;er un fichier B3XXX_TPXML.zip (XXX est votre num&eacute;ro de bin&ocirc;me) dans laquelle vous allez mettre le DTD modifié, la feuille de style XSL finale, le résultat de la transformation en .html, le document r&eacute;ponse &agrave; la partie DOM/Ajax et un document texte ou html contenant vos r&eacute;ponses comment&eacute;es aux questions de la premi&egrave;re partie (XPath), les diff&eacute;rentes requ&ecirc;tes XQuery de la deuxi&egrave;me partie ainsi que des &eacute;lements de leurs r&eacute;sultats et les r&eacute;ponses &agrave; la troisi&egrave;me partie. Num&eacute;rotez les r&eacute;ponses et recopiez leurs &eacute;nonc&eacute;s. 
+    <span class="instruction">Pour &quot;colorier &quot; vos morceaux de code vous pouvez utiliser le site : <a href="http://www.tohtml.com/" target="_blank">http://www.tohtml.com/</a></span> . <span class="Style2">Commencez ce fichier texte/html compte rendu par le num&eacute;ro de votre bin&ocirc;me ainsi que vos noms !</span> </p>
+  <p>Lors de la correction, nous allons copier/coller des fragements de votre compte rendu pour v&eacute;rifier des expressions XPath et requ&ecirc;tes XQuery, ouvrir le fichier XML pour la partie XSL dans le navigateur ainsi que la page html pour la partie Ajax. </p>
+  <p>Cette archive est &agrave;d&eacute;poser sur Moodle  <strong>avant 14h00 le lendemain de la deuxième séance</strong>.</p>
+  <h2>Pr&eacute;paration</h2>
+  <ul>
+    <li style="color: #000000;">Dans le dossier du TP, vous trouverez :
+      <ul>
+        <li>cet &eacute;nonc&eacute; (<code>sujetTP.html</code>). </li>
+        <li>dans le r&eacute;pertoire <code>fichiers</code> 
+          contenant :
+          <ul>
+            <li>une instance XML (<code>countries_TP.xml</code>) qui
+              contient des informations sur les pays du monde,</li>
+            <li>une DTD pour le document XML (<code>countries.dtd</code>),</li>
+            <li>un fichier HTML (<code>resultatTP.html</code>)
+              qui donne le r&eacute;sultat &agrave; obtenir pour la  partie XSL,</li>
+            <li>un r&eacute;pertoire <code>ajax</code> contenant :
+              <ul>
+                <li>un fichier html <code>PartieAjaxDOM.html</code>, base pour la partie ajax</li>
+                <li>des fichiers xml et xsl pour la partie ajax   </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li class="Style1">Prenez le temps de bien observer et comprendre les fichiers XML
+      et DTD que vous allez manipuler.</li>
+  </ul>
+  <p>Une petite explication des &eacute;lements (voir la <a href="https://github.com/mledoze/countries" target="_blank">source des donn&eacute;es</a>) :</p>
+
+  <span class="explication"> 
+    <ul>
+
+  <li><code>name</code>
+    
+    <ul>
+      <li><code>common</code> - common name in english</li>
+    <li><code>official</code> - official name in english</li>
+    <li><code>native</code> - list of all native names
+      
+      <ul>
+        <li>key: three-letter ISO 639-3 language code</li>
+    <li>value: name object
+      
+      <ul>
+        <li>key: official - official name translation</li>
+    <li>key: common - common name translation</li>
+    </ul></li>
+    </ul></li>
+    </ul>
+  </li>
+  <li>country code top-level domain (<code>tld</code>)</li>
+  <li>code ISO 3166-1 alpha-2 (<code>cca2</code>)</li>
+  <li>code ISO 3166-1 numeric (<code>ccn3</code>)</li>
+  <li>code ISO 3166-1 alpha-3 (<code>cca3</code>)</li>
+  <li>code International Olympic Committee (<code>cioc</code>)</li>
+  <li>ISO 4217 currency code(s) (<code>currency</code>)</li>
+  <li>calling code(s) (<code>callingCode</code>)</li>
+  <li>capital city (<code>capital</code>)</li>
+  <li>alternative spellings (<code>altSpellings</code>)</li>
+  <li>region</li>
+  <li>subregion</li>
+  <li>list of official languages (<code>languages</code>)
+    
+    <ul>
+      <li>key: three-letter ISO 639-3 language code</li>
+    <li>value: name of the language in english</li>
+    </ul>
+  </li>
+  <li>latitude and longitude (<code>latlng</code>)</li>
+  <li>name of residents (<code>demonym</code>)</li>
+  <li>landlocked status (<code>landlocked</code>)</li>
+  <li>land borders (<code>borders</code>)</li>
+  <li>land area in km² (<code>area</code>)</li>
+   
+  </ul> 
+  </span>
+ 
+  <h2>Première partie&nbsp;: XML, DTD, XPath, XSLT </h2>
+<h3>Etape 1 : Exploration de l'instance [XPath]</h3>
+<p>Dans cette étape, vous allez construire des expressions XPath
+absolues ou relatives pour sélectionner les noeuds (les balises XML)
+indiqués. 
+Ces expressions pourront vous resservir (en les adaptant) dans l'étape
+suivante.</p>
+<p>Dans le compte rendu, rappelez les questions avec leur num&eacute;ro, donnez l'expression XPath correspondant ainsi que quelques lignes de la r&eacute;ponse. </p>
+<p class="instruction">Ouvrez la bo&icirc;te de dialogue XPath (<code>XML/XPath view</code>).
+Entrez votre expression XPath.</p>
+<ol>
+  <li>Donnez les expressions XPath pour
+sélectionner les éléments suivants:
+<ol>
+  <li>tous les pays </li>
+  <li>les noms officiels des pays</li>
+  <li>les &eacute;l&eacute;ments ayant au moins un attribut</li>
+  <li>les noms officiels des pays en fran&ccedil;ais, pour ceux qui en ont</li>
+  <li>les deuxi&egrave;mes noms natives officiels des pays</li>
+  <li>les noms communs des pays qui n'ont pas de nom natif</li>
+  <li>les noms officiels des pays ayant plus de 9 voisins (borders)</li>
+  <li>les noms officiels des pays dont la capitale commence par &quot;Pa&quot;</li>
+  <li>les sous-continents (subregion) sans doublons </li>
+  </ol>
+  </li>
+  </ol>
+  <h3>Etape 2 &nbsp;: Mise &agrave; jour de l'instance [XML, DTD] </h3>
+  <ul>
+    <li>L'instance <code>countries_TP.xml</code> ne correspond pas
+      tout &agrave;
+      fait &agrave; la DTD <code>countries.dtd</code>. Certains &eacute;lements sont indiqu&eacute;s avec une occurrence 1 ou plusieurs (+) alors qu'ils sont &quot;enfants uniques &quot;. Trouvez les et corrigez la DTD en cons&eacute;quence. </li>
+    <li>Quels sont ces &eacute;lements ? </li>
+    <li>Donnez la d&eacute;finition corrig&eacute;e de leurs &eacute;l&eacute;ments parent. </li>
+    <li>Maintenant votre document doit &ecirc;tre bien form&eacute; <strong>et</strong> valide.</li>
+    <li>Incluez le DTD modifi&eacute; dans le compte rendu final.   </li>
+  </ul>
+  <h3><a id="etape2">Etape 3</a> : Mise en
+forme du corpus des pays du monde [XSLT]<br />
+</h3>
+<p>Vous allez maintenant produire une feuille de style XSL qui
+permet la transformation de l'instance du document XML en document
+HTML. Cette feuille va comprendre des éléments de mise en forme HTML
+et des commandes XSLT permettant de gérer le contenu. Le fichier HTML
+généré devra être le plus similaire possible à <a href="fichiers/resultatTP.html" target="_blank" onclick="window.open(this.href); return false;">ce résultat</a>. Tout au long de cette partie, n'h&eacute;sitez pas &agrave; vous inspirer du code source de <a href="fichiers/resultatTP.html" target="_blank">cette page. </a></p>
+<p class="instruction">Utilisez sous EditiX la fonction <code>File/New/XSL Transformations 1.0 for HTML Output </code> pour créer le fichier
+feuille de style,
+sauvegardez-le ensuite sous le nom de <code>pays_du_monde_tableau_3IF.xsl</code>
+dans
+le répertoire de votre projet.</p>
+<p>Voici les caractéristiques attendues de cette feuille de style
+(recopiez l'en-tête et les premières règles puis inspirez-vous en pour
+créer les règles suivantes)&nbsp;:</p>
+<p>Testez votre feuille de style dans un navigateur, rajoutez dans l'en-tête de votre document XML un
+appel à la feuille de style que vous allez créer</p>
+<pre><code class="xml"> &lt;?xml-stylesheet type="text/xsl" href="pays_du_monde_tableau_3IF.xsl"?&gt; </code>
+</pre>
+Lors de la corrections, nous allons ouvrir le fichier <code>countries_TP.xml </code>que vous nous rendez et nous allon regarder le r&eacute;sultat fourni par le navigateur en plus de votre feuille de style.
+<h4>3.1 En-tête du fichier </h4>
+<p>L'en-tête de la feuille de style a été créé automatiquement par le
+système. </p>
+
+  <pre><code class="xml">&lt;?xml version = "1.0" encoding = "UTF-8"?&gt;<br />
+&lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;</code></pre>
+
+<p class="instruction">Si vous voulez que le résultat s'affiche en
+HTML, ajouter la ligne : </p>
+<pre><code class="xml"> &lt;xsl:output method="html" /&gt; </code></pre>
+<p class="instruction">comme premier élément fils de l'élément <code>&lt;xsl:stylesheet&gt;</code>.
+Pour afficher le résultat en XML, remplacer 'html' par 'xml' (notamment
+pour les premières questions).</p>
+<h4>3.2  Contexte HTML du document</h4>
+<p>On décrit un modèle général qui regroupe les autres. Ce modèle
+s'applique à la racine (défini par le chemin XPath : "&nbsp;/&nbsp;").
+Il débute par les informations HTML qui seront reportées dans le
+document résultat. On retrouve ainsi la structure d'un document HTML
+classique. Les modèles suivants seront appliqués à l'emplacement de la
+commande <code>&lt;xsl:apply-templates/&gt;</code> Remplacer la cha&icirc;ne de caract&egrave;res : <code>moi, mon bin&ocirc;me (B3XXXX)</code> par vos noms et votre num&eacute;ro de bin&ocirc;me. </p>
+
+
+
+<pre><code class="xml">&lt;xsl:template match="/"&gt; 
+&lt;html&gt; 
+ &lt;head&gt; 
+    &lt;title&gt; 
+    Pays du monde 
+  &lt;/title&gt; 
+ &lt;/head&gt; 
+ 
+ &lt;body style="background-color:white;"&gt;  
+   &lt;h1&gt;Les pays du monde&lt;/h1&gt; 
+      Mise en forme par : moi, mon bin&ocirc;me (B3XXX)
+ &lt;/body&gt; 
+&lt;/html&gt; 
+&lt;/xsl:template&gt; </code></pre>
+
+
+
+<h4>3.3 Affichage des m&eacute;ta donn&eacute;es </h4>
+Le premier modèle va définir le traitement à apporter à l'élément
+"metadonnees". Il s'agit ici des instructions Html : alignement, taille et
+couleur de la police.
+<pre><code class="xml">&lt;xsl:template match=&quot;metadonnees&quot;&gt;<br /> &lt;p style=&quot;text-align:center; color:blue;&quot;&gt;<br />	Objectif : &lt;xsl:value-of select=&quot;objectif&quot;/&gt;<br /> &lt;/p&gt;&lt;hr/&gt;<br />&lt;/xsl:template&gt;</code><br />
+</pre>
+<h4>3.4 Affichage des informations de base sur les pays </h4>
+<p>Dans un premier temps, affichez tous les pays dans un seul tableau. </p>
+<ul>
+  <li>Aide sur la syntaxe des tableaux en html :</li>
+</ul>
+
+  <table align="center">
+    <tbody>
+      <tr>
+        <td>&lt;table border=&quot;3&quot; width=&quot;600&quot;
+          align=&quot;center&quot;&gt;</td>
+      </tr>
+      <tr>
+        <td><table border="3" width="600">
+          <tbody>
+            <tr>
+              <td><table border="0" width="600">
+                <tbody>
+                  <tr>
+                    <td bgcolor="#99FF66">&lt;tr&gt;</td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#99FF66"><table align="center" border="1" width="90%">
+                      <tbody>
+                        <tr bgcolor="#ffff99">
+                          <td>&lt;td&gt;&lt;/td&gt;</td>
+                          <td>&lt;td&gt;&lt;/td&gt;</td>
+                        </tr>
+                      </tbody>
+                    </table></td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#99FF66">&lt;/tr&gt;</td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#99FF66">&lt;tr&gt;</td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#99FF66"><table align="center" border="1" width="90%">
+                      <tbody>
+                        <tr bgcolor="#ffff99">
+                          <td>&lt;td&gt;&lt;/td&gt;</td>
+                          <td>&lt;td&gt;&lt;/td&gt;</td>
+                        </tr>
+                      </tbody>
+                    </table></td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#99FF66">&lt;/tr&gt;</td>
+                  </tr>
+                </tbody>
+              </table></td>
+            </tr>
+          </tbody>
+        </table></td>
+      </tr>
+      <tr>
+        <td>&lt;/table&gt;</td>
+      </tr>
+    </tbody>
+  </table>
+
+<p>Cr&eacute;ez une r&egrave;gle pour les &eacute;lements <code>country</code> affichant une ligne de tableau (<code>&lt;tr&gt; ...&lt;/tr&gt;</code>) par pays.</p>
+<ol>
+  <li>Commencez par le nom commun du pays en vert dans la premi&egrave;re cellule (<code>&lt;td&gt;..&lt;/td&gt;</code>) </li>
+  <li>Rajoutez ensuite entre parenth&egrave;ses le nom officiel du pays</li>
+  <li>Si le pays a un nom en Fran&ccedil;ais, affichez le en marron   </li>
+  <li>Affchez le nom de la capitale dans une seconde cellule </li>
+  <li>Dans une troisi&egrave;me cellule, &eacute;num&eacute;rez les noms communs des voisins (quand il y en a). Les voisins sont r&eacute;f&eacute;renc&eacute;s dans la balise country avec leur code cca3. (g&eacute;n&eacute;rez les virgules entre les noms &agrave; l'aide de xsl)</li>
+  <li>Dans une quatri&egrave;me cellule, affichez la latitude et la longitude des pays (cr&eacute;ez une r&egrave;gle pour les &eacute;l&eacute;ments <code>latlng</code>) </li>
+  <li>Dans une cinqui&egrave;me cellule, affichez le drapeau du pays. Les images sont accessibles depuis l'adresse : http://www.geonames.org/flags/x/<code>code_cca2</code>.gif o&ugrave; <code>code_cca2</code> est &agrave; remplacer par le code cca2 du pays en lettres minuscules. Les balises &agrave; g&eacute;n&eacute;rer sont de format 
+      :
+    <pre><code class="xml">&lt;img src=&quot;http://www.geonames.org/flags/x/fr.gif&quot; alt=&quot;&quot; height=&quot;40&quot; width=&quot;60&quot;&gt; </code>
+</pre>
+  </li>
+  <li> Rajoutez une cellule au début avec le numéro de pays lors de l'affichage</li>
+  </ol>
+  
+<h4>3.5 S&eacute;paration des pays par continents et sous-continents <code></code></h4>
+<ul>
+<li>S&eacute;parez les pays d'abord par contients, puis par sous-continents en g&eacute;n&eacute;rant un tableau pour chaque groupe <samp><code></code></samp></li>
+</ul>
+<h4>3.6 Affichage des statistiques sur les pays </h4>
+
+<ol>
+  <li>Listez les continents avec le nombre de pays pour chaque continent avant les tableaux</li>
+  <li>Affichez le nom du pays ayant le plus de voisins ainsi que le nombre de ses voisins </li>
+</ol>
+<h3>&nbsp;</h3>
+<h2><a id="partie2">Deuxième&nbsp;partie : XQuery </a></h2>
+<p><a>Vous allez maintenant exploiter les données du
+fichier XML.
+L'objectif est d'obtenir à chaque fois un document XML bien formé, donc
+avec un seul élément racine. Les requêtes doivent être intégrées entre des balises XML, par exemple&nbsp;:</a></p>
+<pre><code class="xquery">&lt;pays&gt;{
+  for $p in //country
+    return $p
+}&lt;/pays&gt;</code></pre><p></p>
+<pre><code class="xquery">&lt;continents&gt;{
+  for $c in distinct-values(//country/region)
+	  order by $c
+  	  return &lt;continent&gt;{data($c)}&lt;/continent&gt;
+  }
+&lt;/continents&gt;</code></pre>
+<p class="instruction"><a>Vous allez utiliser l'application BaseX comme environnement d'ex&eacute;cution XQuery</a></p>
+<p class="instruction">BaseX est un gestionnaire de base de données XML capable d'interpréter des requêtes XQuery.
+  
+  En utilisant le menu File/New, créez une nouvelle base de données à partir du fichier countries_TP.xml avec les options par défaut proposées par BaseX.
+  
+  Affichez l'onglet de saisie de requêtes (Edit/Query Panel). Il y a deux modes de requêtes: les requêtes "simples" uniquement en XPath, et les requêtes XQuery (compatible XPath). Plus d'informations sur le site de la documentation de <a href="http://docs.basex.org/wiki/Graphical_User_Interface" target="_blank" class="instruction">BaseX.org. </a></p>
+<p>Donnez les requêtes XQuery pour obtenir les données
+suivantes, ainsi que les quelques premi&egrave;res lignes de la r&eacute;ponse :</p>
+<ol>
+  <li>Retournez les noms officiels des pays en ordre alphab&eacute;tique. Structurez le r&eacute;sultat sous la forme de  :</li>
+  <pre><code class="xml">&lt;noms_pays&gt;
+  &lt;nom&gt;American Samoa&lt;/nom&gt;
+  &lt;nom&gt;Anguilla&lt;/nom&gt;
+  &lt;nom&gt;Antarctica&lt;/nom&gt;
+  &lt;nom&gt;Antigua and Barbuda&lt;/nom&gt;
+  ...
+&lt;/noms_pays&gt;</code></pre>
+  <li>Retournez les noms en Fran&ccedil;ais des pays  </li>
+  <li>Retournez les r&eacute;publiques </li>
+  <li>Affichez les appelations alternatives (altSpellings) des pays qui ne se trouvent pas parmi les noms de ce pays (officiels ou natifs). Structurez le r&eacute;sultat sous la forme de  :</li>
+  <pre><code class="xml">&lt;noms_pays&gt;
+	&lt;pays nom=&quot;Aruba&quot;&gt;
+		&lt;nomAlternatif_different_des_noms&gt;AW&lt;/nomAlternatif_different_des_noms&gt;
+	&lt;/pays&gt;
+	&lt;pays nom=&quot;Islamic Republic of Afghanistan&quot;&gt;
+		&lt;nomAlternatif_different_des_noms&gt;AF&lt;/nomAlternatif_different_des_noms&gt;
+	&lt;/pays&gt;
+	&lt;pays nom=&quot;Islamic Republic of Afghanistan&quot;&gt;
+		&lt;nomAlternatif_different_des_noms&gt;Af&#289;&#257;nist&#257;n&lt;/nomAlternatif_different_des_noms&gt;
+	&lt;/pays&gt;
+	...
+&lt;/noms_pays&gt;
+</code></pre>
+  <li>Pour chaque continent : donnez le nombre de pays, le pays avec le plus grande superficie ainsi que les langues parl&eacute;s sur ce continent sans doublons. (allez-y &eacute;tape par &eacute;tape). Astuce : pour avoir les
+    valeurs uniques des continents, utilisez la fonction distinct-values. Structurez le r&eacute;sultat sous la forme de  :
+    <pre><code class="xml">&lt;infosContinents&gt;<br />    &lt;continent nom=&quot;Americas&quot; nbPays=&quot;56&quot;&gt;<br />    &lt;infos&gt;<br />      &lt;plusGrandPays superficie=&quot;9.98467E6&quot;&gt;Canada&lt;/plusGrandPays&gt;<br />      &lt;languesParles&gt;Dutch Papiamento English Guaran&iacute; Spanish French Belizean Creole Aymara Quechua Portuguese Greenlandic Haitian Creole Jamaican Patois&lt;/languesParles&gt;<br />    &lt;/infos&gt;<br />  &lt;/continent&gt;<br />  &lt;continent nom=&quot;Asia&quot; nbPays=&quot;50&quot;&gt;<br />    &lt;infos&gt;<br />      &lt;plusGrandPays superficie=&quot;9.706961E6&quot;&gt;People's Republic of China&lt;/plusGrandPays&gt;<br />      &lt;languesParles&gt;Dari Pashto Turkmen Arabic Armenian Russian Azerbaijani Bengali Malay Dzongkha Chinese Georgian English Indonesian Hindi Tamil Persian Aramaic Sorani Hebrew Japanese Kazakh Kyrgyz Khmer Korean Lao French Sinhala Portuguese Maldivian Burmese Mongolian Nepali Urdu Filipino Thai Tajik Tetum Turkish Uzbek Vietnamese&lt;/languesParles&gt;<br />    &lt;/infos&gt;<br />  &lt;/continent&gt;
+	...
+&lt;/infosContinents&gt;</code></pre>
+</li>
+  <li>Comptez le nombre de langues pour chaque pays &agrave; l'aide d'une fonction appel&eacute;e : local:compteLangues, prenant en param&egrave;tre un noeud country et retournant le nombre de langues parl&eacute;es. Structurez le r&eacute;sultat sous la forme de  :<br />
+    <pre><code class="xml">&lt;nblangues&gt;
+&lt;abw&gt;
+  &lt;nom&gt;Aruba&lt;/nom&gt;
+  &lt;nblangues&gt;2&lt;/nblangues&gt;
+&lt;/abw&gt;
+&lt;afg&gt;
+  &lt;nom&gt;Islamic Republic of Afghanistan&lt;/nom&gt;
+  &lt;nblangues&gt;3&lt;/nblangues&gt;
+&lt;/afg&gt;
+&lt;ago&gt;
+  &lt;nom&gt;Republic of Angola&lt;/nom&gt;
+  &lt;nblangues&gt;1&lt;/nblangues&gt;
+&lt;/ago&gt;
+...
+&lt;/nblangues&gt;</code></pre>
+o&ugrave; l'information de chaque pays est encadr&eacute;e par des balises correspondant &agrave; son code cca3. Utilisez la fonction <code>element</code> pour cr&eacute;er des &eacute;lements en xQuery. </li>
+  </ol>
+<h2><a id="partie2">Troisième partie&nbsp;: DOM et ajax </a></h2>
+<p>Cette partie a pour but de vous faire d&eacute;couvrir la <a href="http://fr.wikipedia.org/wiki/Asynchronous_JavaScript_and_XML" onclick="window.open(this.href); return false;">technologie AJAX</a>. Sur une page HTML des boutons permettent de d&eacute;clencher des fonctions Javascript: celles-ci vont dynamiquement manipuler des documents XML, notamment la page HTML elle-m&ecirc;me, mais aussi charger un document XML, en extraire des informations, appliquer une feuille de style XSL, <em>etc</em>. Les fonctions javascript sont incluses dans le code source de la page HTML. </p>
+<p>Le premier bouton ci-dessous appelle la fonction Javascript <code>setNom</code> modifiant le contenu d'une balise <code>&lt;span  id=&quot;id_nom_a_remplacer&quot;&gt;</code> &agrave; partir du contenu du champ texte situ&eacute; &agrave; c&ocirc;t&eacute;.  </p>
+<p>Le deuxi&egrave;me bouton fait appel &agrave; une fonction plus complexe en chargeant les fichiers exemples <code>ajax.bib.xml</code> et <code>ajax.bib.xsl</code>, en appliquant la feuille de style au fichier XML, et en extrayant une liste HTML (balise <code>&lt;ul&gt;</code>) du r&eacute;sultat de la transformation qui remplace le contenu de la balise <code>&lt;span  id=&quot;id_element_a_remplacer&quot;&gt;</code></p>
+<p>Le troisi&egrave;me bouton remplace le contenu de la balise <code>&lt;span  id=&quot;id_nom_a_remplacer&quot;&gt;</code>, en r&eacute;cup&eacute;rant les noms &agrave; partir du fichier <code>Employees.xml</code> parcouru en javascript. </p>
+<p class="instruction"><strong>Consultez le code source de la <a href="fichiers/ajax/PartieAjaxDOM.html" target="_blank">page exemple</a> pour comprendre le fonctionnement du code Javascript et l'organisation des &eacute;l&eacute;ments HTML concern&eacute;s.</strong> Testez le premier bouton, puis essayez de faire fonctionner le deuxi&egrave;me bouton: <strong>il est n&eacute;cessaire de compl&eacute;ter le code de la fonction Javascript qui lui est associ&eacute;</strong>. Vous pouvez tester et vous inspirer du fonctionnement du troisi&egrave;me bouton. </p>
+<p class="instruction">Utilisez les outils de d&eacute;veloppement de Firefox (bouton F12) pour inspecter les &eacute;l&eacute;ments, consultez les messages d'erreur dans l'onglet : Console, ex&eacute;cutez pas &agrave; pas le javascript dans l'onglet D&eacute;bogueur. </p>
+<p class="instruction">Utilisez un &eacute;diteur de texte, par exemple Notepad++ pour modifier le code source de la page. </p>
+<p class="instruction"><strong>Vous trouverez des informations compl&eacute;mentaires sur le site de w3schools.com sur les m&eacute;thodes <a href="http://www.w3schools.com/dom/dom_node.asp" onclick="window.open(this.href); return false;">DOM en g&eacute;n&eacute;ral</a> et sur les m&eacute;thodes <a href="http://www.w3schools.com/jsref/dom_obj_document.asp" onclick="window.open(this.href); return false;">DOM sp&eacute;cifique html</a></strong> </p>
+<p>
+  <input name="button" type="button" id="myButton1" onclick="setNom(document.getElementById('myText1').value);" value="1. AJAX simple" />
+  <input name="text" type="text" id="myText1" value="Toto" />
+  <br />
+  <input name="button2" type="button" id="myButton2" onclick="Bouton2_ajaxBibliographie('fichiers/ajax//ajax.bib.xml','fichiers/ajax/ajax.bib.xsl','ul');" value="2. AJAX avec ajax.bib.xml/ajax.bib.xsl" />
+  <br />
+  <input name="button2" type="button" id="myButton3" onclick="Bouton3_ajaxEmployees('fichiers/ajax/Employees.xml');" value="3. AJAX avec Employees.xml" />
+  <br />
+</p>
+<div>
+  <p>Les noms sont : <br/>
+      <span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">LES NOMS (Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par les noms) </span>.</p>
+</div>
+<div id="id_element_a_remplacer">
+  <p style="color: red; font-weight: bold;">Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par une bibliographie en XML mise en forme par une feuille de style XSLT...</p>
+  </div>
+  <h2 id="travail">Travail &agrave; r&eacute;aliser</h2>
+  <p>Cr&eacute;ez une page web (appel&eacute;e <code>PartieAjaxDOM.html</code> en vous inspirant de<a href="fichiers/ajax/PartieAjaxDOM.html" target="_blank"> ce fichier</a> (vous pouvez carr&eacute;ment le modifier et le compl&eacute;ter)) contenant les boutons pour effectuer les actions suivantes :</p>
+  <ol>
+    <li>Bouton 1 : modifie la couleur de l'arri&egrave;re plan de la page en bleu et la couleur du texte du bouton en blanc. </li>
+    <li>Bouton 2 :
+      <ul>
+          <li>affiche les informations <code>&lt;title&gt;</code>, <code>&lt;dtstart&gt;/&lt;dtend&gt;</code>, <code>&lt;summary&gt;</code>, <code>&lt;url&gt;</code>, <code>&lt;description&gt;</code> des &eacute;v&egrave;nements (un seul) dont le titre contient le mot &quot;Workaholics&quot; dans le fichier <a href="ajax.files/calendar-short.xml">calendar-short.xml</a> en utilisant une feuille de style (<code>calendar-eventlist-workaholics.xsl</code>, &agrave; &eacute;crire). La date sera format&eacute;e au moyen de <code>substring</code> pour obtenir une chaine de la forme : &quot;le DD-MM-YYYY de HHhMM &agrave; HHhMM&quot;.</li>
+        <li>affiche le Bouton 3 (attribut style &agrave; : <code>style=&quot;display:none;&quot;</code>).</li>
+      </ul>
+    </li>
+    <li>Bouton 3 (invisible au d&eacute;but) : modifie, en utilisant javascript et des fonctions DOM, les informations de l'&eacute;v&egrave;nement affich&eacute;e avec le bouton 2. Il faudra notamment  :
+      <ul>
+          <li>afficher l'image du programme.</li>
+          <li>ajouter des informations telles que l'ann&eacute;e (Year), l'&acirc;ge requis (Rated), la date de premi&egrave;re diffusion (Released), la dur&eacute;e (Runtime), le genre (Genre), la langue (Language), le pays (Country), le score et le nombre de votes sur IMDB (imdbRating et imdbVotes).</li>
+      </ul>
+      Pour obtenir ces informations suppl&eacute;mentaires, vous int&eacute;rrogerez le service <a href="http://www.omdbapi.com">OMDB</a> accessible &agrave; l'adresse <a href="http://www.omdbapi.com">http://www.omdbapi.com</a> en utilisant la fonction <code>chargerHttpJSON</code> qui vous est fournie dans le code source de cette page. </li>
+    <li>Bouton 4 : affiche le calendrier complet (informations de tous les &eacute;v&egrave;nements) en utilisant une feuille de style (<code>calendar-eventlist.xsl</code>, &agrave; &eacute;crire). Trier la liste des &eacute;v&egrave;nements par ordre alphab&eacute;tique sur le <code>&lt;title&gt;</code>. </li>
+    <li>(bonus) Proposez une visualisation int&eacute;ressante des donn&eacute;es sur les pays de la premi&egrave;re partie en les enrichissant avec des informations disponibles sur le web (<a href="http://openstreetmap.fr/" target="_blank">openStreetMaps</a>, <a href="https://commons.wikimedia.org/wiki/File:BlankMap-World6-Equirectangular.svg" target="_blank">wikipedia</a>, ... sites openData, biblioth&egrave;ques javascript, ...) </li>
+  </ol>
+  <p style="color: red; font-weight: bold;">&nbsp;</p>
+</div>
+</div>
+
+
+
+</body></html>
