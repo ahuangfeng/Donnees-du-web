@@ -38,7 +38,32 @@ Xquery:
 
 1.
 <noms_pays>{
-for $x in //country
-order by $x/name/official
-return <nom>{$x/name/official}</nom>
+for $x in //country/name/official
+order by $x
+return <nom>{data($x)}</nom>
 }</noms_pays>
+
+2.
+<noms_pays>{
+for $x in //country/name/native_name
+where $x[@lang="fra"]
+order by $x/official
+return <nom>{data($x)}</nom>
+}</noms_pays>
+
+3.
+<noms_pays>{
+for $x in //country/name/official
+where contains(string(data($x)),"Republic")
+order by $x
+return <nom>{data($x)}</nom>
+}</noms_pays>
+
+4.
+<noms_pays>{
+for $x in //country/altSpellings
+where not(contains(string(data($x)),../name/official/text()))
+return <pays nom="{data($x/../name/official)}"><nomAlternatif_different_des_noms>{data($x)}</nomAlternatif_different_des_noms></pays>
+}</noms_pays>
+
+5.
