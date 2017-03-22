@@ -66,4 +66,28 @@ where not(contains(string(data($x)),../name/official/text()))
 return <pays nom="{data($x/../name/official)}"><nomAlternatif_different_des_noms>{data($x)}</nomAlternatif_different_des_noms></pays>
 }</noms_pays>
 
-5.
+5.(manque une space entre les langues parles)
+<infosContinents>{
+for $x in distinct-values(//region)
+return 
+<continent nom="{data($x)}" nbPays="{count(//country[region=$x])}">
+<infos>
+<plusGrandPays superficie="{max(//area[../region=$x])}">
+{data(//country[region=$x and area=max(//area[../region=$x])]/name/official)}
+</plusGrandPays>
+<languesParles>
+{data(//country[region=$x and area=max(//area[../region=$x])]/languages)}
+</languesParles>
+</infos>
+</continent>
+}</infosContinents>
+
+6. (pas fini encore)
+declare function local:compteLangues($country as xs:string)
+as xs:string
+{
+  let $nb := count(//country[name/official=$country]/languages)
+  return $nb
+};
+
+<h1>{string(local:compteLangues("Aruba"))}</h1>
