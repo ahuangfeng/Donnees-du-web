@@ -34,3 +34,11 @@ Balise languages+ --> language (sans le +)
 Etape3.
 
 
+Xquery:
+
+1.
+<noms_pays>{
+for $x in //country
+order by $x/name/official
+return <nom>{$x/name/official}</nom>
+}</noms_pays>
