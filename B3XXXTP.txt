@@ -1,0 +1,36 @@
+I. Exploration de l'instance XPath
+
+1. 
+/countries/country
+
+2.
+/countries/country/name/official
+
+3.
+//*[count(@*)>=1]
+
+4.
+/countries/country/name/native_name[@lang="fra"]
+
+5.
+/countries/country/name/native_name/official
+
+6.
+/countries/country/name[count(native_name)=0]/common
+
+7.
+/countries/country[count(borders)>9]/name/official
+
+8.
+/countries/country[contains(capital,"Pa")]/name/official
+
+9.
+//subregion[not(text()=preceding::subregion/text())]
+
+Etape2.
+Balise languages+ --> language (sans le +)
+{inclure nouveau DTD}
+
+Etape3.
+
+

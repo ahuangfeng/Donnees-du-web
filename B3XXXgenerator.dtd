@@ -1,0 +1,749 @@
+<?xml encoding="UTF-8"?>
+
+<!ELEMENT countries (metadonnees,country+)>
+<!ATTLIST countries
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT metadonnees (description,cree_le,objectif)>
+<!ATTLIST metadonnees
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT country (name,tld*,cca2,ccn3,cca3,cioc,currency*,callingCode*,
+                   capital,altSpellings+,region,subregion,languages,
+                   latlng*,demonym,landlocked,borders*,area)>
+<!ATTLIST country
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT description (#PCDATA)>
+<!ATTLIST description
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT cree_le (#PCDATA)>
+<!ATTLIST cree_le
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT objectif (#PCDATA)>
+<!ATTLIST objectif
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT name (common,official,native_name*)>
+<!ATTLIST name
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tld (#PCDATA)>
+<!ATTLIST tld
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT cca2 (#PCDATA)>
+<!ATTLIST cca2
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ccn3 (#PCDATA)>
+<!ATTLIST ccn3
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT cca3 (#PCDATA)>
+<!ATTLIST cca3
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT cioc (#PCDATA)>
+<!ATTLIST cioc
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT currency (#PCDATA)>
+<!ATTLIST currency
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT callingCode (#PCDATA)>
+<!ATTLIST callingCode
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT capital (#PCDATA)>
+<!ATTLIST capital
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT altSpellings (#PCDATA)>
+<!ATTLIST altSpellings
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT region (#PCDATA)>
+<!ATTLIST region
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT subregion (#PCDATA)>
+<!ATTLIST subregion
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT languages (kaz?,bis?,bel?,(bul|div)?,hye?,vie?,bjz?,cat?,
+                     (eus,glg,oci)?,(fas|lit|pol|tha)?,cal?,cha?,aze?,
+                     (jpn|kat)?,ces?,(amh|slk)?,bwg?,ind?,bos?,hrv?,
+                     (kor|mkd|mon)?,bar?,(khm|slv)?,ara?,ber?,mey?,
+                     (heb|ron|som|(arc,ckb))?,sin?,(dzo|isl|lav|nep)?,
+                     aym?,ell?,tur?,sqi?,srp?,grn?,(fin|que)?,
+                     (ben|est|lao|swe)?,afr?,deu?,(kal|(nno,nob,smi))?,
+                     kir?,rus?,(hun|nor|tgk|ukr|uzb)?,dan?,fao?,crs?,
+                     (eng|fra|por|zho)*,
+                     (ltz|mfe|run|tir|(fij,hif)|(hmo,tpi)|(mri,nzs))?,
+                     nld?,(gil|pap)?,(kck,khi,ndc,nde)?,mlt?,(hin|msa)?,
+                     (kin|nrf|pau|tam|ton|zdj)?,(kon,lin)?,lua?,
+                     (fil|glv|sag|swa|tet|tvl)?,(nbl,nso)?,mlg?,gsw?,
+                     ita?,(lat|mah|niu|roh|srd)?,(her,hgm,kwn,loz,ndo)?,
+                     smo?,(gle|jam|nau|nfr|rar|tkl)?,nya?,sna?,sot?,
+                     (ssw|toi)?,tsn?,(tso,ven,xho)?,
+                     (hat|pih|spa|urd|zib|zul)?,(prs,pus)?,(mya|tuk)?)>
+<!ATTLIST languages
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT latlng (#PCDATA)>
+<!ATTLIST latlng
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT demonym (#PCDATA)>
+<!ATTLIST demonym
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT landlocked (#PCDATA)>
+<!ATTLIST landlocked
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT borders (#PCDATA)>
+<!ATTLIST borders
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT area (#PCDATA)>
+<!ATTLIST area
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT native_name (official,common)>
+<!ATTLIST native_name
+  xmlns CDATA #FIXED ''
+  lang NMTOKEN #REQUIRED>
+
+<!ELEMENT kaz (#PCDATA)>
+<!ATTLIST kaz
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT bis (#PCDATA)>
+<!ATTLIST bis
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT bel (#PCDATA)>
+<!ATTLIST bel
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT bul (#PCDATA)>
+<!ATTLIST bul
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT div (#PCDATA)>
+<!ATTLIST div
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hye (#PCDATA)>
+<!ATTLIST hye
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT vie (#PCDATA)>
+<!ATTLIST vie
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT bjz (#PCDATA)>
+<!ATTLIST bjz
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT cat (#PCDATA)>
+<!ATTLIST cat
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT eus (#PCDATA)>
+<!ATTLIST eus
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT glg (#PCDATA)>
+<!ATTLIST glg
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT oci (#PCDATA)>
+<!ATTLIST oci
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT fas (#PCDATA)>
+<!ATTLIST fas
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT lit (#PCDATA)>
+<!ATTLIST lit
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT pol (#PCDATA)>
+<!ATTLIST pol
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tha (#PCDATA)>
+<!ATTLIST tha
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT cal (#PCDATA)>
+<!ATTLIST cal
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT cha (#PCDATA)>
+<!ATTLIST cha
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT aze (#PCDATA)>
+<!ATTLIST aze
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT jpn (#PCDATA)>
+<!ATTLIST jpn
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT kat (#PCDATA)>
+<!ATTLIST kat
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ces (#PCDATA)>
+<!ATTLIST ces
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT amh (#PCDATA)>
+<!ATTLIST amh
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT slk (#PCDATA)>
+<!ATTLIST slk
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT bwg (#PCDATA)>
+<!ATTLIST bwg
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ind (#PCDATA)>
+<!ATTLIST ind
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT bos (#PCDATA)>
+<!ATTLIST bos
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hrv (#PCDATA)>
+<!ATTLIST hrv
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT kor (#PCDATA)>
+<!ATTLIST kor
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mkd (#PCDATA)>
+<!ATTLIST mkd
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mon (#PCDATA)>
+<!ATTLIST mon
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT bar (#PCDATA)>
+<!ATTLIST bar
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT khm (#PCDATA)>
+<!ATTLIST khm
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT slv (#PCDATA)>
+<!ATTLIST slv
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ara (#PCDATA)>
+<!ATTLIST ara
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ber (#PCDATA)>
+<!ATTLIST ber
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mey (#PCDATA)>
+<!ATTLIST mey
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT heb (#PCDATA)>
+<!ATTLIST heb
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ron (#PCDATA)>
+<!ATTLIST ron
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT som (#PCDATA)>
+<!ATTLIST som
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT arc (#PCDATA)>
+<!ATTLIST arc
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ckb (#PCDATA)>
+<!ATTLIST ckb
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sin (#PCDATA)>
+<!ATTLIST sin
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT dzo (#PCDATA)>
+<!ATTLIST dzo
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT isl (#PCDATA)>
+<!ATTLIST isl
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT lav (#PCDATA)>
+<!ATTLIST lav
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nep (#PCDATA)>
+<!ATTLIST nep
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT aym (#PCDATA)>
+<!ATTLIST aym
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ell (#PCDATA)>
+<!ATTLIST ell
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tur (#PCDATA)>
+<!ATTLIST tur
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sqi (#PCDATA)>
+<!ATTLIST sqi
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT srp (#PCDATA)>
+<!ATTLIST srp
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT grn (#PCDATA)>
+<!ATTLIST grn
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT fin (#PCDATA)>
+<!ATTLIST fin
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT que (#PCDATA)>
+<!ATTLIST que
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ben (#PCDATA)>
+<!ATTLIST ben
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT est (#PCDATA)>
+<!ATTLIST est
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT lao (#PCDATA)>
+<!ATTLIST lao
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT swe (#PCDATA)>
+<!ATTLIST swe
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT afr (#PCDATA)>
+<!ATTLIST afr
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT deu (#PCDATA)>
+<!ATTLIST deu
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT kal (#PCDATA)>
+<!ATTLIST kal
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nno (#PCDATA)>
+<!ATTLIST nno
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nob (#PCDATA)>
+<!ATTLIST nob
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT smi (#PCDATA)>
+<!ATTLIST smi
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT kir (#PCDATA)>
+<!ATTLIST kir
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT rus (#PCDATA)>
+<!ATTLIST rus
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hun (#PCDATA)>
+<!ATTLIST hun
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nor (#PCDATA)>
+<!ATTLIST nor
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tgk (#PCDATA)>
+<!ATTLIST tgk
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ukr (#PCDATA)>
+<!ATTLIST ukr
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT uzb (#PCDATA)>
+<!ATTLIST uzb
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT dan (#PCDATA)>
+<!ATTLIST dan
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT fao (#PCDATA)>
+<!ATTLIST fao
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT crs (#PCDATA)>
+<!ATTLIST crs
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT eng (#PCDATA)>
+<!ATTLIST eng
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT fra (#PCDATA)>
+<!ATTLIST fra
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT por (#PCDATA)>
+<!ATTLIST por
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT zho (#PCDATA)>
+<!ATTLIST zho
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ltz (#PCDATA)>
+<!ATTLIST ltz
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mfe (#PCDATA)>
+<!ATTLIST mfe
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT run (#PCDATA)>
+<!ATTLIST run
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tir (#PCDATA)>
+<!ATTLIST tir
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT fij (#PCDATA)>
+<!ATTLIST fij
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hif (#PCDATA)>
+<!ATTLIST hif
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hmo (#PCDATA)>
+<!ATTLIST hmo
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tpi (#PCDATA)>
+<!ATTLIST tpi
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mri (#PCDATA)>
+<!ATTLIST mri
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nzs (#PCDATA)>
+<!ATTLIST nzs
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nld (#PCDATA)>
+<!ATTLIST nld
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT gil (#PCDATA)>
+<!ATTLIST gil
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT pap (#PCDATA)>
+<!ATTLIST pap
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT kck (#PCDATA)>
+<!ATTLIST kck
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT khi (#PCDATA)>
+<!ATTLIST khi
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ndc (#PCDATA)>
+<!ATTLIST ndc
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nde (#PCDATA)>
+<!ATTLIST nde
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mlt (#PCDATA)>
+<!ATTLIST mlt
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hin (#PCDATA)>
+<!ATTLIST hin
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT msa (#PCDATA)>
+<!ATTLIST msa
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT kin (#PCDATA)>
+<!ATTLIST kin
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nrf (#PCDATA)>
+<!ATTLIST nrf
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT pau (#PCDATA)>
+<!ATTLIST pau
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tam (#PCDATA)>
+<!ATTLIST tam
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ton (#PCDATA)>
+<!ATTLIST ton
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT zdj (#PCDATA)>
+<!ATTLIST zdj
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT kon (#PCDATA)>
+<!ATTLIST kon
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT lin (#PCDATA)>
+<!ATTLIST lin
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT lua (#PCDATA)>
+<!ATTLIST lua
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT fil (#PCDATA)>
+<!ATTLIST fil
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT glv (#PCDATA)>
+<!ATTLIST glv
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sag (#PCDATA)>
+<!ATTLIST sag
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT swa (#PCDATA)>
+<!ATTLIST swa
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tet (#PCDATA)>
+<!ATTLIST tet
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tvl (#PCDATA)>
+<!ATTLIST tvl
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nbl (#PCDATA)>
+<!ATTLIST nbl
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nso (#PCDATA)>
+<!ATTLIST nso
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mlg (#PCDATA)>
+<!ATTLIST mlg
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT gsw (#PCDATA)>
+<!ATTLIST gsw
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ita (#PCDATA)>
+<!ATTLIST ita
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT lat (#PCDATA)>
+<!ATTLIST lat
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mah (#PCDATA)>
+<!ATTLIST mah
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT niu (#PCDATA)>
+<!ATTLIST niu
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT roh (#PCDATA)>
+<!ATTLIST roh
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT srd (#PCDATA)>
+<!ATTLIST srd
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT her (#PCDATA)>
+<!ATTLIST her
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hgm (#PCDATA)>
+<!ATTLIST hgm
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT kwn (#PCDATA)>
+<!ATTLIST kwn
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT loz (#PCDATA)>
+<!ATTLIST loz
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ndo (#PCDATA)>
+<!ATTLIST ndo
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT smo (#PCDATA)>
+<!ATTLIST smo
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT gle (#PCDATA)>
+<!ATTLIST gle
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT jam (#PCDATA)>
+<!ATTLIST jam
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nau (#PCDATA)>
+<!ATTLIST nau
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nfr (#PCDATA)>
+<!ATTLIST nfr
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT rar (#PCDATA)>
+<!ATTLIST rar
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tkl (#PCDATA)>
+<!ATTLIST tkl
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nya (#PCDATA)>
+<!ATTLIST nya
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sna (#PCDATA)>
+<!ATTLIST sna
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT sot (#PCDATA)>
+<!ATTLIST sot
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ssw (#PCDATA)>
+<!ATTLIST ssw
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT toi (#PCDATA)>
+<!ATTLIST toi
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tsn (#PCDATA)>
+<!ATTLIST tsn
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tso (#PCDATA)>
+<!ATTLIST tso
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT ven (#PCDATA)>
+<!ATTLIST ven
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT xho (#PCDATA)>
+<!ATTLIST xho
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT hat (#PCDATA)>
+<!ATTLIST hat
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT pih (#PCDATA)>
+<!ATTLIST pih
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT spa (#PCDATA)>
+<!ATTLIST spa
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT urd (#PCDATA)>
+<!ATTLIST urd
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT zib (#PCDATA)>
+<!ATTLIST zib
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT zul (#PCDATA)>
+<!ATTLIST zul
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT prs (#PCDATA)>
+<!ATTLIST prs
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT pus (#PCDATA)>
+<!ATTLIST pus
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT mya (#PCDATA)>
+<!ATTLIST mya
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT tuk (#PCDATA)>
+<!ATTLIST tuk
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT common (#PCDATA)>
+<!ATTLIST common
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT official (#PCDATA)>
+<!ATTLIST official
+  xmlns CDATA #FIXED ''>
+
