@@ -8,6 +8,7 @@
 <script type="text/javascript">
 //fonctions javascript
 // <![CDATA[      
+		var faitDeja = false;
   
 		  function recupererPremierEnfantDeTypeNode(n) {
 			x = n.firstChild;
@@ -91,7 +92,7 @@
 		  // Remplacement de l'élément
 		  elementHtmlParent.replaceChild(elementAInserer,elementHtmlARemplacer);
 
-		  var bouton = document.getElementById("myButton3").style="display:none;";
+		  var bouton = document.getElementById("myButton3").style="display:inline;";
 
     }
 
@@ -121,6 +122,38 @@
 	  
 
   }
+
+  function Mettrevisible(){
+  	document.body.style.backgroundColor = "white";
+  	document.body.style.color="black";
+  }
+
+  function Bouton3_AffichageImageInfos(URL, jsonDocumentUrl){
+
+  	if(!faitDeja){
+  	//Affichage de l'image
+    var container = document.getElementById('imagesFilm');
+    var img=document.createElement('img'); 
+    img.setAttribute("src",URL); 
+    container.appendChild(img);
+
+    //Cherche le json avec les infos
+  	var data = chargerHttpJSON(jsonDocumentUrl);
+  	var place = document.getElementById("donneesSerie");
+  	place.innerHTML += "Année (Year) : " + data.Year + "\n";
+  	place.innerHTML += "Âge requis (Rated) : " + data.Rated + "\n";
+  	place.innerHTML += "Première diffusion (Released) : " + data.Released + "\n";
+  	place.innerHTML += "Durée (Runtime) : " + data.Runtime + "\n";
+  	place.innerHTML += "Genre (Genre) : " + data.Genre + "\n";
+  	place.innerHTML += "Language (Language) : " + data.Language + "\n";
+  	place.innerHTML += "Pays (Country) : " + data.Country + "\n";
+  	place.innerHTML += "Score IMDB (imdbRating) : " + data.imdbRating + "\n";
+  	place.innerHTML += "Nombre de votes (imdbVotes) : " + data.imdbVotes + "\n";
+  	faitDeja = true;
+  	}else{
+
+  	}
+  }
   
   function Bouton4_ajaxEmployeesTableau(xmlDocumentUrl, xslDocumentUrl) {
   //commenter la ligne suivante qui affiche la boîte de dialogue!
@@ -131,11 +164,6 @@
       document.body.style.backgroundColor = "blue";
       document.body.style.color="white";
   }
-
-  function afficherInfos(xmlDocumentUrl){
-  	var xmlDocument = chargerHttpXML(xmlDocumentUrl);
-  }
-
   // ]]>
 </script>
 
@@ -144,13 +172,15 @@
 <body>
 <p>Fichier à modifier/compélter</p>
 <p>
-  <input name="button" type="button" id="myButton1" onClick="changerArrierePlan();" value="1. Modifier arrière plan" />
+  <input name="button" type="button" id="myButton1" onClick="changerArrierePlan();" value="1. Modifier arrière plan en bleu" />
+  <input type="button" name="reset" id="resetButton" onClick="Mettrevisible();" value="Reset">
   <br />
   <input name="button2" type="button" id="myButton2" onClick="Bouton2_AfficherInformations('calendar-short.xml','calendar-eventlist-workaholics.xsl','ul');" value="2. AJAX avec calendar-short.xml/calendar-eventlist-workaholics.xsl" />
   <br />
-  <input name="button2" type="button" id="myButton3" onClick="Bouton3_ajaxEmployees('Employees.xml');" value="3. AJAX avec Employees.xml" />
+  <input name="button3" type="button" id="myButton3" style="display:none" onClick="Bouton3_AffichageImageInfos('https://walter.trakt.tv/images/seasons/000/049/004/posters/thumb/36178aaee8.jpg','http://www.omdbapi.com/?t=workaholics');" value="3. Affichage Image de la Série" />
   <br />
 </p>
+
 <div>
   <p>Les noms sont : <br/>
       <span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">LES NOMS (Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par les noms) </span>.</p>
@@ -158,7 +188,9 @@
 <div id="id_element_a_remplacer">
   <p style="color: red; font-weight: bold;">Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par une bibliographie en XML mise en forme par une feuille de style XSLT...</p>
   </div>
-
+<div id="imagesFilm">
+<pre id="donneesSerie"></pre>
+</div>
   
 </body>
 </html>
