@@ -1,196 +1,234 @@
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
-  
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <title>TP 3IF Ajax</title>
-  <meta name="author" content="Elöd EGYED-ZSIGMOND">
-  
- 
-<script type="text/javascript">
-//fonctions javascript
-// <![CDATA[      
-		var faitDeja = false;
-  
-		  function recupererPremierEnfantDeTypeNode(n) {
-			x = n.firstChild;
-			while ( x.nodeType != 1 ) { // Test if x is an element node (and not a text node or other)
-			  x = x.nextSibling;
-			}
-			return x;
-		  }
-		//change le contenu de l'élement avec l'id "nom" avec la chaine de caractéres en paramètre	  
-		  function setNom( nom ) {
-			var elementHtmlARemplir = window.document.getElementById("id_nom_a_remplacer");
-			elementHtmlARemplir.innerHTML = nom;
-		  }
-		
-		//charge le fichier XML se trouvant à l'URL relative donné dans le paramètreet le retourne
-        function chargerHttpXML(xmlDocumentUrl) { 
-          
-          var httpAjax;
-          
-          httpAjax = window.XMLHttpRequest ?
-            new XMLHttpRequest() :
-            new ActiveXObject('Microsoft.XMLHTTP');
-          
-          if (httpAjax.overrideMimeType) {
-            httpAjax.overrideMimeType('text/xml');
-          }
-          
-          //chargement du fichier XML à l'aide de XMLHttpRequest synchrone (le 3° paramètre est défini à false)
-          httpAjax.open('GET', xmlDocumentUrl, false);
-          httpAjax.send();
-          
-          return httpAjax.responseXML;
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>TP 3IF Ajax</title>
+    <meta name="author" content="Elöd EGYED-ZSIGMOND">
+    <style type="text/css">
+      body {
+      margin-top: 35px;
+      margin-bottom: 35px;
+      margin-right: 35px;
+      margin-left: 35px;
+      }
+    </style>
+
+    <script type="text/javascript">
+        //fonctions javascript
+        // <![CDATA[      
+        var faitDeja = false;
+
+        function recupererPremierEnfantDeTypeNode(n) {
+            x = n.firstChild;
+            while (x.nodeType != 1) { // Test if x is an element node (and not a text node or other)
+                x = x.nextSibling;
+            }
+            return x;
         }
-  
+            //change le contenu de l'élement avec l'id "nom" avec la chaine de caractéres en paramètre    
+        function setNom(nom) {
+            var elementHtmlARemplir = window.document.getElementById("id_nom_a_remplacer");
+            elementHtmlARemplir.innerHTML = nom;
+        }
+
+        //charge le fichier XML se trouvant à l'URL relative donné dans le paramètreet le retourne
+        function chargerHttpXML(xmlDocumentUrl) {
+
+            var httpAjax;
+
+            httpAjax = window.XMLHttpRequest ?
+                new XMLHttpRequest() :
+                new ActiveXObject('Microsoft.XMLHTTP');
+
+            if (httpAjax.overrideMimeType) {
+                httpAjax.overrideMimeType('text/xml');
+            }
+
+            //chargement du fichier XML à l'aide de XMLHttpRequest synchrone (le 3° paramètre est défini à false)
+            httpAjax.open('GET', xmlDocumentUrl, false);
+            httpAjax.send();
+
+            return httpAjax.responseXML;
+        }
+
         // Charge le fichier JSON se trouvant à l'URL donnée en paramètre et le retourne
         function chargerHttpJSON(jsonDocumentUrl) {
 
             var httpAjax;
 
             httpAjax = window.XMLHttpRequest ?
-                        new XMLHttpRequest() :
-                        new ActiveXObject('Microsoft.XMLHTTP');
+                new XMLHttpRequest() :
+                new ActiveXObject('Microsoft.XMLHTTP');
 
-                if (httpAjax.overrideMimeType) {
-                    httpAjax.overrideMimeType('text/xml');
+            if (httpAjax.overrideMimeType) {
+                httpAjax.overrideMimeType('text/xml');
+            }
+
+            // chargement du fichier JSON à l'aide de XMLHttpRequest synchrone (le 3° paramètre est défini à false)
+            httpAjax.open('GET', jsonDocumentUrl, false);
+            httpAjax.send();
+
+            var responseData = eval("(" + httpAjax.responseText + ")");
+
+            return responseData;
+        }
+
+
+        function Bouton2_AfficherInformations(xmlDocumentUrl, xslDocumentUrl, newElementName) {
+
+            var xsltProcessor = new XSLTProcessor();
+
+            // Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
+            var xslDocument = chargerHttpXML(xslDocumentUrl);
+
+            // Importation du .xsl
+            xsltProcessor.importStylesheet(xslDocument);
+
+            // Chargement du fichier XML à l'aide de XMLHttpRequest synchrone 
+            var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+
+            // Création du document XML transformé par le XSL
+            var newXmlDocument = xsltProcessor.transformToDocument(xmlDocument);
+
+            // Recherche du parent (dont l'id est "here") de l'élément à remplacer dans le document HTML courant
+            var elementHtmlParent = window.document.getElementById("id_element_a_remplacer");
+            // Premier élément fils du parent
+            var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
+            // Premier élément "elementName" du nouveau document (par exemple, "ul", "table"...)
+            var elementAInserer = newXmlDocument.getElementsByTagName(newElementName)[0];
+
+            // Remplacement de l'élément
+            elementHtmlParent.replaceChild(elementAInserer, elementHtmlARemplacer);
+
+            var bouton = document.getElementById("myButton3").style = "display:inline;";
+
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        function Bouton3_ajaxEmployees(xmlDocumentUrl) {
+            var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+
+            //extraction des noms à partir du document XML (avec une feuille de style ou en javascript)
+            var lesNoms = xmlDocument.getElementsByTagName("LastName");
+
+            // Parcours de la liste des noms avec une boucle for et 
+            // construction d'une chaine de charactères contenant les noms séparés par des espaces 
+            // Pour avoir la longueur d'une liste : attribut 'length'
+            // Accès au texte d'un noeud "LastName" : NOM_NOEUD.firstChild.nodeValue
+            var chaineDesNoms = "";
+            for (i = 0; i < lesNoms.length; i++) {
+                if (i > 0) {
+                    chaineDesNoms = chaineDesNoms + ", ";
                 }
+                chaineDesNoms = chaineDesNoms + lesNoms[i].firstChild.nodeValue + " ";
+            }
+            // Appel (ou recopie) de la fonction setNom(...) ou bien autre façon de modifier le texte de l'élément "span"
+            setNom(chaineDesNoms);
+        }
 
-                // chargement du fichier JSON à l'aide de XMLHttpRequest synchrone (le 3° paramètre est défini à false)
-                httpAjax.open('GET', jsonDocumentUrl, false);
-                httpAjax.send();
+        function Mettrevisible() {
+            document.body.style.backgroundColor = "white";
+            document.body.style.color = "black";
+        }
 
-                var responseData = eval("(" + httpAjax.responseText + ")");
+        function Bouton3_AffichageImageInfos(URL, jsonDocumentUrl) {
 
-                return responseData;
-            } 
- 
+            if (!faitDeja) {
+                //Affichage de l'image
+                var container = document.getElementById('imagesFilm');
+                var img = document.createElement('img');
+                img.setAttribute("src", URL);
+                container.appendChild(img);
 
-  function Bouton2_AfficherInformations(xmlDocumentUrl, xslDocumentUrl, newElementName) {
-	  
-		  var xsltProcessor = new XSLTProcessor();
+                //Cherche le json avec les infos
+                var data = chargerHttpJSON(jsonDocumentUrl);
+                var place = document.getElementById("donneesSerie");
+                place.innerHTML += "Année (Year) : " + data.Year + "\n";
+                place.innerHTML += "Âge requis (Rated) : " + data.Rated + "\n";
+                place.innerHTML += "Première diffusion (Released) : " + data.Released + "\n";
+                place.innerHTML += "Durée (Runtime) : " + data.Runtime + "\n";
+                place.innerHTML += "Genre (Genre) : " + data.Genre + "\n";
+                place.innerHTML += "Language (Language) : " + data.Language + "\n";
+                place.innerHTML += "Pays (Country) : " + data.Country + "\n";
+                place.innerHTML += "Score IMDB (imdbRating) : " + data.imdbRating + "\n";
+                place.innerHTML += "Nombre de votes (imdbVotes) : " + data.imdbVotes + "\n";
+                faitDeja = true;
+            }
+        }
 
-		  // Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
-		  var xslDocument = chargerHttpXML(xslDocumentUrl); 
+        function Bouton4_ajaxEmployeesTableau(xmlDocumentUrl, xslDocumentUrl) {
+            //commenter la ligne suivante qui affiche la boîte de dialogue!
+            alert("Fonction à compléter...");
+        }
 
-		  // Importation du .xsl
-		  xsltProcessor.importStylesheet(xslDocument);
+        function changerArrierePlan() {
+                document.body.style.backgroundColor = "blue";
+                document.body.style.color = "white";
+        }
 
-		  // Chargement du fichier XML à l'aide de XMLHttpRequest synchrone 
-		  var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+        function Bouton4_AfficherCalendrier(xmlDocumentUrl, xslDocumentUrl, newElementName){
+            var xsltProcessor = new XSLTProcessor();
 
-		  // Création du document XML transformé par le XSL
-		  var newXmlDocument = xsltProcessor.transformToDocument(xmlDocument);
+            // Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
+            var xslDocument = chargerHttpXML(xslDocumentUrl);
 
-		  // Recherche du parent (dont l'id est "here") de l'élément à remplacer dans le document HTML courant
-		  var elementHtmlParent = window.document.getElementById("id_element_a_remplacer");
-		  // Premier élément fils du parent
-		  var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
-		  // Premier élément "elementName" du nouveau document (par exemple, "ul", "table"...)
-		  var elementAInserer = newXmlDocument.getElementsByTagName(newElementName)[0];
-		  
-		  // Remplacement de l'élément
-		  elementHtmlParent.replaceChild(elementAInserer,elementHtmlARemplacer);
+            // Importation du .xsl
+            xsltProcessor.importStylesheet(xslDocument);
 
-		  var bouton = document.getElementById("myButton3").style="display:inline;";
+            // Chargement du fichier XML à l'aide de XMLHttpRequest synchrone 
+            var xmlDocument = chargerHttpXML(xmlDocumentUrl);
 
-    }
+            // Création du document XML transformé par le XSL
+            var newXmlDocument = xsltProcessor.transformToDocument(xmlDocument);
 
-	 /////////////////////////////////////////////////////////////////////////////////////
-  function Bouton3_ajaxEmployees(xmlDocumentUrl) {
+            // Recherche du parent (dont l'id est "here") de l'élément à remplacer dans le document HTML courant
+            var elementHtmlParent = window.document.getElementById("calendrier");
+            // Premier élément fils du parent
+            var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
+            // Premier élément "elementName" du nouveau document (par exemple, "ul", "table"...)
+            var elementAInserer = newXmlDocument.getElementsByTagName(newElementName)[0];
 
-		  
-	  var xmlDocument = chargerHttpXML(xmlDocumentUrl);
-	  
-	  //extraction des noms à partir du document XML (avec une feuille de style ou en javascript)
-	  var lesNoms = xmlDocument.getElementsByTagName("LastName");
-	  
-	  // Parcours de la liste des noms avec une boucle for et 
-	  // construction d'une chaine de charactères contenant les noms séparés par des espaces 
-	  // Pour avoir la longueur d'une liste : attribut 'length'
-	  // Accès au texte d'un noeud "LastName" : NOM_NOEUD.firstChild.nodeValue
-	  var chaineDesNoms = "";
-	  for (i=0;i<lesNoms.length;i++) {
-				if (i>0) { chaineDesNoms = chaineDesNoms +", "; }
-				chaineDesNoms=chaineDesNoms +lesNoms[i].firstChild.nodeValue + " ";
-	  }
-	  
-	  
-	  // Appel (ou recopie) de la fonction setNom(...) ou bien autre façon de modifier le texte de l'élément "span"
-	  setNom(chaineDesNoms);
-	  
-	  
-
-  }
-
-  function Mettrevisible(){
-  	document.body.style.backgroundColor = "white";
-  	document.body.style.color="black";
-  }
-
-  function Bouton3_AffichageImageInfos(URL, jsonDocumentUrl){
-
-  	if(!faitDeja){
-  	//Affichage de l'image
-    var container = document.getElementById('imagesFilm');
-    var img=document.createElement('img'); 
-    img.setAttribute("src",URL); 
-    container.appendChild(img);
-
-    //Cherche le json avec les infos
-  	var data = chargerHttpJSON(jsonDocumentUrl);
-  	var place = document.getElementById("donneesSerie");
-  	place.innerHTML += "Année (Year) : " + data.Year + "\n";
-  	place.innerHTML += "Âge requis (Rated) : " + data.Rated + "\n";
-  	place.innerHTML += "Première diffusion (Released) : " + data.Released + "\n";
-  	place.innerHTML += "Durée (Runtime) : " + data.Runtime + "\n";
-  	place.innerHTML += "Genre (Genre) : " + data.Genre + "\n";
-  	place.innerHTML += "Language (Language) : " + data.Language + "\n";
-  	place.innerHTML += "Pays (Country) : " + data.Country + "\n";
-  	place.innerHTML += "Score IMDB (imdbRating) : " + data.imdbRating + "\n";
-  	place.innerHTML += "Nombre de votes (imdbVotes) : " + data.imdbVotes + "\n";
-  	faitDeja = true;
-  	}else{
-
-  	}
-  }
-  
-  function Bouton4_ajaxEmployeesTableau(xmlDocumentUrl, xslDocumentUrl) {
-  //commenter la ligne suivante qui affiche la boîte de dialogue!
-	  alert("Fonction à compléter...");
-  }
-
-  function changerArrierePlan(){
-      document.body.style.backgroundColor = "blue";
-      document.body.style.color="white";
-  }
-  // ]]>
-</script>
-
- 
+            // Remplacement de l'élément
+            elementHtmlParent.replaceChild(elementAInserer, elementHtmlARemplacer);
+        }
+            // ]]>
+    </script>
 </head>
-<body>
-<p>Fichier à modifier/compélter</p>
-<p>
-  <input name="button" type="button" id="myButton1" onClick="changerArrierePlan();" value="1. Modifier arrière plan en bleu" />
-  <input type="button" name="reset" id="resetButton" onClick="Mettrevisible();" value="Reset">
-  <br />
-  <input name="button2" type="button" id="myButton2" onClick="Bouton2_AfficherInformations('calendar-short.xml','calendar-eventlist-workaholics.xsl','ul');" value="2. AJAX avec calendar-short.xml/calendar-eventlist-workaholics.xsl" />
-  <br />
-  <input name="button3" type="button" id="myButton3" style="display:none" onClick="Bouton3_AffichageImageInfos('https://walter.trakt.tv/images/seasons/000/049/004/posters/thumb/36178aaee8.jpg','http://www.omdbapi.com/?t=workaholics');" value="3. Affichage Image de la Série" />
-  <br />
-</p>
 
-<div>
-  <p>Les noms sont : <br/>
-      <span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">LES NOMS (Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par les noms) </span>.</p>
-</div>
-<div id="id_element_a_remplacer">
-  <p style="color: red; font-weight: bold;">Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par une bibliographie en XML mise en forme par une feuille de style XSLT...</p>
-  </div>
-<div id="imagesFilm">
-<pre id="donneesSerie"></pre>
-</div>
-  
+<body>
+    <h2>AJAX et DOM par  :  (B3242)</h2>
+        <ul>
+          <li>Alex HUANG FENG</li>
+          <li>Loïc SÉRAZIN</li>
+        </ul>
+
+    <p>
+        <input name="button" type="button" id="myButton1" onClick="changerArrierePlan();" value="1. Modifier arrière plan en bleu" />
+        <input type="button" name="reset" id="resetButton" onClick="Mettrevisible();" value="Reset">
+        <br />
+        <input name="button2" type="button" id="myButton2" onClick="Bouton2_AfficherInformations('calendar-short.xml','calendar-eventlist-workaholics.xsl','ul');" value="2. AJAX avec calendar-short.xml/calendar-eventlist-workaholics.xsl" />
+        <br />
+        <input name="button3" type="button" id="myButton3" style="display:none" onClick="Bouton3_AffichageImageInfos('https://walter.trakt.tv/images/seasons/000/049/004/posters/thumb/36178aaee8.jpg','http://www.omdbapi.com/?t=workaholics');" value="3. Affichage Image de la Série et infos" />
+        <br />
+        <input name="button4" type="button" id="myButton4" onClick="Bouton4_AfficherCalendrier('calendar-short.xml','calendar-eventlist.xsl','body');" value="4. Afficher Calendrier">
+        <br/>
+    </p>
+    <div>
+        <p>Les noms sont :
+            <br/>
+            <span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">LES NOMS (Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par les noms) </span>.
+        </p>
+    </div>
+    
+    <div id="id_element_a_remplacer">
+        <p style="color: red; font-weight: bold;">Informations de Workaholics</p>
+    </div>
+    <div id="imagesFilm">
+        <pre id="donneesSerie"></pre>
+    </div>
+    <div id="calendrier">
+      <p style="color: red; font-weight: bold;">Div pour le calendrier</p>
+    </div>
 </body>
+
 </html>
