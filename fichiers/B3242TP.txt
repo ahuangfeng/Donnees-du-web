@@ -82,12 +82,20 @@ return
 </continent>
 }</infosContinents>
 
-6. (pas fini encore)
-declare function local:compteLangues($country as xs:string)
-as xs:string
+6. (pas fini encore)!
+declare function local:compteLangues($country as element(country))
+as xs:integer
 {
-  let $nb := count(//country[name/official=$country]/languages)
+  let $nb := count($country/languages/*)
   return $nb
 };
 
-<h1>{string(local:compteLangues("Aruba"))}</h1>
+<nblangues>{
+for $x in //country
+let $cca3 := data(cca3)
+return 
+<cca3>
+<nom>{data($x/name/official)}</nom>
+<nblangues>{local:compteLangues($x)}</nblangues>
+</cca3>
+}</nblangues>

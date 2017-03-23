@@ -65,7 +65,7 @@
             } 
  
 
-  function Bouton2_ajaxBibliographie(xmlDocumentUrl, xslDocumentUrl, newElementName) {
+  function Bouton2_AfficherInformations(xmlDocumentUrl, xslDocumentUrl, newElementName) {
 	  
 		  var xsltProcessor = new XSLTProcessor();
 
@@ -90,6 +90,8 @@
 		  
 		  // Remplacement de l'élément
 		  elementHtmlParent.replaceChild(elementAInserer,elementHtmlARemplacer);
+
+		  var bouton = document.getElementById("myButton3").style="display:none;";
 
     }
 
@@ -124,18 +126,27 @@
   //commenter la ligne suivante qui affiche la boîte de dialogue!
 	  alert("Fonction à compléter...");
   }
-      // ]]>
+
+  function changerArrierePlan(){
+      document.body.style.backgroundColor = "blue";
+      document.body.style.color="white";
+  }
+
+  function afficherInfos(xmlDocumentUrl){
+  	var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+  }
+
+  // ]]>
 </script>
 
  
 </head>
-<body
+<body>
 <p>Fichier à modifier/compélter</p>
 <p>
-  <input name="button" type="button" id="myButton1" onClick="setNom(document.getElementById('myText1').value);" value="1. AJAX simple" />
-  <input name="text" type="text" id="myText1" value="Toto" />
+  <input name="button" type="button" id="myButton1" onClick="changerArrierePlan();" value="1. Modifier arrière plan" />
   <br />
-  <input name="button2" type="button" id="myButton2" onClick="Bouton2_ajaxBibliographie('ajax.bib.xml','ajax.bib.xsl','ul');" value="2. AJAX avec ajax.bib.xml/ajax.bib.xsl" />
+  <input name="button2" type="button" id="myButton2" onClick="Bouton2_AfficherInformations('calendar-short.xml','calendar-eventlist-workaholics.xsl','ul');" value="2. AJAX avec calendar-short.xml/calendar-eventlist-workaholics.xsl" />
   <br />
   <input name="button2" type="button" id="myButton3" onClick="Bouton3_ajaxEmployees('Employees.xml');" value="3. AJAX avec Employees.xml" />
   <br />
